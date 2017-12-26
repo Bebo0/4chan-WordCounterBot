@@ -2,17 +2,24 @@ import basc_py4chan
 import string
 import re
 from collections import Counter
-# board = basc_py4chan.Board('biz')
-# thread = b.get_thread(423491034)
-# print(thread)
+
+# USAGE: 
+#       1) in terminal, cd to folder that contains the files
+#       2) type python 4chanbot.py
+
+# VARIABLES:
 boardName = 'biz'
-#boardName = 'biz'
+dictionary = Counter()
 board = basc_py4chan.Board(boardName)
 thread_ids = board.get_all_thread_ids()
-str_thread_ids = [str(id) for id in thread_ids]  # need to do this so str.join below works
-boardName = '/'+boardName+'/'
+
+
+#boardName = 'biz'
+
+
+#str_thread_ids = [str(id) for id in thread_ids]  # need to do this so str.join below works
+#boardName = '/'+boardName+'/'
 # print('There are', len(thread_ids), 'active threads on ',boardName,':', ', '.join(str_thread_ids))
-dictionary = Counter()
 
 for threadID in thread_ids:
 	thread = board.get_thread(threadID)
@@ -39,25 +46,25 @@ for threadID in thread_ids:
 				dictionary[word] = 1
 
 
-for threadID in thread_ids:
-	thread = board.get_thread(threadID)
-	posts = thread.all_posts
+# for threadID in thread_ids:
+# 	thread = board.get_thread(threadID)
+# 	posts = thread.all_posts
 	
 
 
-	for post in posts:
-		# print(post.text_comment)
-		strong = post.comment.encode('ascii', 'ignore').lower()
-		# strong = ''.join(subject).lower().encode('ascii','ignore')
+# 	for post in posts:
+# 		# print(post.text_comment)
+# 		strong = post.comment.encode('ascii', 'ignore').lower()
+# 		# strong = ''.join(subject).lower().encode('ascii','ignore')
 
-		allow = string.letters + string.digits + ' ' + '\'' + '-'
-		lol = re.sub('[^%s]' % allow,'',strong)
-		lol = lol.split()
-		for word in lol:
-			if word in dictionary:
-				dictionary[word] += 1
-			else:
-				dictionary[word] = 1
+# 		allow = string.letters + string.digits + ' ' + '\'' + '-'
+# 		lol = re.sub('[^%s]' % allow,'',strong)
+# 		lol = lol.split()
+# 		for word in lol:
+# 			if word in dictionary:
+# 				dictionary[word] += 1
+# 			else:
+# 				dictionary[word] = 1
 
 print dictionary
 
