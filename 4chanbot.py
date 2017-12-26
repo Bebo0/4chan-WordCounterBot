@@ -13,19 +13,12 @@ dictionary = Counter()
 
 
 
-def main():
-	board = basc_py4chan.Board(boardName)
-	threadIDs = board.get_all_thread_ids()
-	
-	runBot()
-	print dictionary
 
-if __name__ == '__main__':
-	main()
 
 def runBot(board, threadIDs):
 	parseThreadTitles(board, threadIDs)
 	parseThreadPosts (board, threadIDs)
+
 
 
 def parseThreadTitles(board, threadIDs):
@@ -88,6 +81,27 @@ def parseThreadPosts(board, threadIDs):
 		threadIDs {ArrayOfthread_id} -- the ids of all threads being parsed
 	"""
 
+	for threadID in threadIDs:
+		thread = board.get_thread(threadID)
+		posts = thread.all_posts
+	
+
+
+		for post in posts:
+			# print(post.text_comment)
+	 		strong = post.comment.encode('ascii', 'ignore').lower()
+	 		parsingHelper(strong)
+# 		# strong = ''.join(subject).lower().encode('ascii','ignore')
+
+# 		allow = string.letters + string.digits + ' ' + '\'' + '-'
+# 		lol = re.sub('[^%s]' % allow,'',strong)
+# 		lol = lol.split()
+# 		for word in lol:
+# 			if word in dictionary:
+# 				dictionary[word] += 1
+# 			else:
+# 				dictionary[word] = 1
+
 #boardName = 'biz'
 
 
@@ -95,29 +109,29 @@ def parseThreadPosts(board, threadIDs):
 #boardName = '/'+boardName+'/'
 # print('There are', len(thread_ids), 'active threads on ',boardName,':', ', '.join(str_thread_ids))
 
-for threadID in thread_ids:
-	thread = board.get_thread(threadID)
-	topic = thread.topic
-	subject = topic.subject
-	# print type (subject)
-	if type(subject) == unicode:
+# for threadID in thread_ids:
+# 	thread = board.get_thread(threadID)
+# 	topic = thread.topic
+# 	subject = topic.subject
+# 	# print type (subject)
+# 	if type(subject) == unicode:
 
 
-		strong = subject.encode('ascii', 'ignore').lower()
-		# strong = ''.join(subject).lower().encode('ascii','ignore')
+# 		strong = subject.encode('ascii', 'ignore').lower()
+# 		# strong = ''.join(subject).lower().encode('ascii','ignore')
 
-		allow = string.letters + string.digits + ' ' + '\'' + '-'
-		lol = re.sub('[^%s]' % allow,'',strong)
+# 		allow = string.letters + string.digits + ' ' + '\'' + '-'
+# 		lol = re.sub('[^%s]' % allow,'',strong)
 
-		lol = lol.split()
+# 		lol = lol.split()
 
-		# print('Subject:', lol)    #, 'Comment:', topic.text_comment)
+# 		# print('Subject:', lol)    #, 'Comment:', topic.text_comment)
 
-		for word in lol:
-			if word in dictionary:
-				dictionary[word] += 1
-			else:
-				dictionary[word] = 1
+# 		for word in lol:
+# 			if word in dictionary:
+# 				dictionary[word] += 1
+# 			else:
+# 				dictionary[word] = 1
 
 
 # for threadID in thread_ids:
@@ -140,7 +154,7 @@ for threadID in thread_ids:
 # 			else:
 # 				dictionary[word] = 1
 
-print dictionary
+#print dictionary
 
 #for file in thread.files():
  #   print(file)
@@ -148,3 +162,13 @@ print dictionary
 # In a while...
 #print("I fetched", thread.update(), "new replies.")
 #
+#
+def main():
+	board = basc_py4chan.Board(boardName)
+	threadIDs = board.get_all_thread_ids()
+	
+	runBot(board, threadIDs)
+	print dictionary
+
+if __name__ == '__main__':
+	main()
