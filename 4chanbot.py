@@ -10,9 +10,83 @@ from collections import Counter
 # VARIABLES:
 boardName = 'biz'
 dictionary = Counter()
-board = basc_py4chan.Board(boardName)
-thread_ids = board.get_all_thread_ids()
 
+
+
+def main():
+	board = basc_py4chan.Board(boardName)
+	threadIDs = board.get_all_thread_ids()
+	
+	runBot()
+	print dictionary
+
+if __name__ == '__main__':
+	main()
+
+def runBot(board, threadIDs):
+	parseThreadTitles(board, threadIDs)
+	parseThreadPosts (board, threadIDs)
+
+
+def parseThreadTitles(board, threadIDs):
+	""" Parses thread titles and adds them to dictionary
+
+	Board ArrayOfthread_id -> void
+	
+	Arguments:
+		board {Board} -- the board being parsed
+		threadIDs {ArrayOfthread_id} -- the ids of all threads being parsed
+	"""
+	
+	
+	
+
+	for threadID in threadIDs:
+		thread = board.get_thread(threadID)
+		topic = thread.topic
+		subject = topic.subject
+		# print type (subject)
+		if type(subject) == unicode:
+			strong = subject.encode('ascii', 'ignore').lower()
+			parsingHelper(strong)
+
+def parsingHelper(strong):
+	"""
+	Splits strong into individual strings then adds them to the dictionary 
+	
+	"""
+	allowedSymbols = string.letters + string.digits + ' ' + '\'' + '-'
+	aos = re.sub('[^%s]' % allowedSymbols,'',strong)
+	aos = aos.split()
+	addArrToDictionary(aos)
+
+
+def addArrToDictionary(aos):
+	"""
+	ArrayOfStrings -> void
+
+	Adds all strings in given array to dictionary
+
+	Arguments:
+		aos {ArrayOfStrings} -- contains all the words to be added to dictionary
+	"""
+
+	for word in aos:
+		if word in dictionary:
+			dictionary[word] += 1
+		else:
+			dictionary[word] = 1
+
+
+def parseThreadPosts(board, threadIDs):
+	""" Parses all thread posts and adds them to dictionary
+	
+	Board ArrayOfthread_id -> void
+	
+	Arguments:
+		board {Board} -- the board being parsed
+		threadIDs {ArrayOfthread_id} -- the ids of all threads being parsed
+	"""
 
 #boardName = 'biz'
 
@@ -73,3 +147,4 @@ print dictionary
 
 # In a while...
 #print("I fetched", thread.update(), "new replies.")
+#
