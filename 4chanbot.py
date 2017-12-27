@@ -9,27 +9,27 @@ from collections import Counter
 
 # VARIABLES:
 boardName = 'biz'
-dictionary = Counter()
+counter = Counter()
 
 # FUNCTIONS:
-def addArrToDictionary(aos):
-	""" Adds all strings in given array to dictionary
+def addArrToCounter(aos):
+	""" Adds the occurence of all strings in given array to counter
 
 	ArrayOfStrings -> void
 
 	Arguments:
-		aos {ArrayOfStrings} -- contains all the words to be added to dictionary
+		aos {ArrayOfStrings} -- contains all the words to be added to counter
 	"""
 
 	for word in aos:
-		if word in dictionary:
-			dictionary[word] += 1
+		if word in counter:
+			counter[word] += 1
 		else:
-			dictionary[word] = 1
+			counter[word] = 1
 
 
 def parsingHelper(strong):
-	""" Splits strong into individual strings then adds them to the dictionary 
+	""" Splits strong into individual strings then adds them to the counter 
 
 	Strong -> void
 	
@@ -37,11 +37,11 @@ def parsingHelper(strong):
 	allowedSymbols = string.letters + string.digits + ' ' + '\'' + '-'
 	aos = re.sub('[^%s]' % allowedSymbols,'',strong)
 	aos = aos.split()
-	addArrToDictionary(aos)
+	addArrToCounter(aos)
 
 
 def parseThreadPosts(board, threadIDs):
-	""" Parses all thread posts and adds them to dictionary
+	""" Parses all thread posts and adds them to counter
 	
 	Board ArrayOfthread_id -> void
 	
@@ -49,7 +49,7 @@ def parseThreadPosts(board, threadIDs):
 		board {Board} -- the board being parsed
 		threadIDs {ArrayOfthread_id} -- the ids of all threads being parsed
 	"""
-
+	print "Parsing thread posts..."
 	for threadID in threadIDs:
 		thread = board.get_thread(threadID)
 		posts = thread.all_posts
@@ -57,10 +57,11 @@ def parseThreadPosts(board, threadIDs):
 		for post in posts:
 	 		strong = post.comment.encode('ascii', 'ignore').lower()
 	 		parsingHelper(strong)
+	print "Successfully parsed thread posts!"
 
 
 def parseThreadTitles(board, threadIDs):
-	""" Parses thread titles and adds them to dictionary
+	""" Parses thread titles and adds them to counter
 
 	Board ArrayOfthread_id -> void
 	
@@ -68,7 +69,7 @@ def parseThreadTitles(board, threadIDs):
 		board {Board} -- the board being parsed
 		threadIDs {ArrayOfthread_id} -- the ids of all threads being parsed
 	"""
-
+	print "Parsing thread titles..."
 	for threadID in threadIDs:
 		thread = board.get_thread(threadID)
 		topic = thread.topic
@@ -77,6 +78,7 @@ def parseThreadTitles(board, threadIDs):
 		if type(subject) == unicode:
 			strong = subject.encode('ascii', 'ignore').lower()
 			parsingHelper(strong)
+	print "Successfully parsed thread titles!"
 
 
 def runBot(board, threadIDs):
@@ -99,7 +101,7 @@ def main():
 	threadIDs = board.get_all_thread_ids()
 	
 	runBot(board, threadIDs)
-	print dictionary
+	print counter
 
 if __name__ == '__main__':
 	main()
